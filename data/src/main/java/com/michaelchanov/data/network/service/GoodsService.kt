@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface GoodsService {
 
     @GET("super_top.php?action=topglav")
-    fun getGoods(): GoodsDto
+    suspend fun getGoods(): GoodsDto
 }

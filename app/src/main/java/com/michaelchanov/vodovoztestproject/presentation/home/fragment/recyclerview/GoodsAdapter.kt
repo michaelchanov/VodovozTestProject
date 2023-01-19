@@ -13,6 +13,10 @@ import com.michaelchanov.vodovoztestproject.presentation.home.models.GoodVo
 class GoodsAdapter : ListAdapter<GoodVo,
         GoodsAdapter.GoodsAdapterViewHolder>(GoodsDiffCallBack()) {
 
+    companion object {
+        private const val BASE_URL_FOR_GLIDE = "http://m.vodovoz.ru"
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoodsAdapterViewHolder {
 
         return GoodsAdapterViewHolder(
@@ -31,8 +35,12 @@ class GoodsAdapter : ListAdapter<GoodVo,
 
         fun bind(good: GoodVo) {
             with(binding) {
-                tvGoodsPrice.text = good.goodsPrice.toString()
-                Glide.with(binding.root).load(good.goodsPicture).into(ivGoodsPicture)
+                tvGoodsPrice.text = String.format(
+                    binding.root.context.getString(
+                        R.string.goods_adapter_view_holder_goods_price_text), good.goodsPrice)
+
+                Glide.with(binding.root).load(
+                    BASE_URL_FOR_GLIDE + good.goodsPicture).into(ivGoodsPicture)
 
                 if (good.isLiked) {
                     ivLike.setImageResource(R.drawable.ic_like_active)

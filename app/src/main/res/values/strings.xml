@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">VodovozTestProject</string>
 
-    <string name="goods_adapter_view_holder_goods_price_text">%d Р</string>
+    <string name="goods_adapter_view_holder_goods_price_text">%d ₽</string>
 </resources>
