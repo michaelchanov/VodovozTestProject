@@ -19,6 +19,10 @@ import com.michaelchanov.vodovoztestproject.presentation.home.viewmodel.factory.
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
+    companion object {
+        private const val GOT_DATA_SUCCESSFULLY_STATUS_VALUE = "Success"
+    }
+
     private val viewModel: HomeViewModel by viewModels(
         factoryProducer = { HomeViewModelFactory(GetGoodsUseCase(GoodsRepositoryImpl())) })
     private val binding by viewBinding(FragmentHomeBinding::bind)
@@ -33,13 +37,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun subscribeOnViewModelData() {
         viewModel.goods.observe(viewLifecycleOwner) { goodsVo ->
-            listGoodsInfoVo = goodsVo.goods
-            goodsVo.goods.forEach { goodInfoVo ->
-                setGoodsAdapter(goods = listGoodsInfoVo?.get(0)?.goodsData)
 
-                binding.tlCategories.addTab(
-                    binding.tlCategories.newTab().setText(goodInfoVo.name)
-                )
+            if (goodsVo.status == GOT_DATA_SUCCESSFULLY_STATUS_VALUE) {
+                listGoodsInfoVo = goodsVo.goods
+                goodsVo.goods.forEach { goodInfoVo ->
+                    setGoodsAdapter(goods = listGoodsInfoVo?.get(0)?.goodsData)
+
+                    binding.tlCategories.addTab(
+                        binding.tlCategories.newTab().setText(goodInfoVo.name))
+                }
+            } else {
+                with(binding) {
+                    rvGoods.visibility = View.GONE
+                    tlCategories.visibility = View.GONE
+                }
             }
         }
     }
@@ -70,9 +81,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 LinearLayoutManager.HORIZONTAL, false
             )
         }
-    }
-
-    companion object {
-        fun newInstance() = HomeFragment()
     }
 }
